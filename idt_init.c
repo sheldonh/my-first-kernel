@@ -1,7 +1,8 @@
-#include "keyboard_handler.h"
+#include "kbd.h"
 #include "ports.h"
 
 #define IDT_SIZE 256
+#define PIC_INTR_KBD 0x02
 
 extern void load_idt(unsigned long *idt_ptr);
 
@@ -22,7 +23,7 @@ void idt_init(void)
 	unsigned long idt_ptr[2];
 
 	/* populate IDT entry of keyboard's interrupt */
-	keyboard_address = (unsigned long)keyboard_handler;
+	keyboard_address = (unsigned long)kbd_irq;
 	IDT[0x21].offset_lowerbits = keyboard_address & 0xffff;
 	IDT[0x21].selector = 0x08; /* KERNEL_CODE_SEGMENT_OFFSET */
 	IDT[0x21].zero = 0;
@@ -57,12 +58,12 @@ void idt_init(void)
 	/* Initialization finished */
 
 	/* mask interrupts */
-	wport(0x21 , 0xff);
-	wport(0xA1 , 0xff);
+	wport(0x21 , 0xFD);
+	wport(0xA1 , 0xFF);
 
 	/* fill the IDT descriptor */
 	idt_address = (unsigned long)IDT ;
-	idt_ptr[0] = (sizeof (struct IDT_entry) * IDT_SIZE) + ((idt_address & 0xffff) << 16);
+	idt_ptr[0] = (sizeof (struct IDT_entry) * IDT_SIZE) + ((idt_address & 0xFFFF) << 16);
 	idt_ptr[1] = idt_address >> 16 ;
 
 	load_idt(idt_ptr);

@@ -1,4 +1,4 @@
-#include "keyboard_handler.h"
+#include "kbd.h"
 #include "ports.h"
 #include "video.h"
 
@@ -45,7 +45,7 @@ unsigned char keyboard_map[128] =
 
 unsigned short keyboard_shift;
 
-void keyboard_handler_main(void) {
+void kbd_input(void) {
 
 	if (rport(KEYBOARD_STATUS_PORT) & 0x01) {
 		unsigned char keycode = rport(KEYBOARD_DATA_PORT);
