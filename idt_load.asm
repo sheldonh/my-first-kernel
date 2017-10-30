@@ -2,9 +2,9 @@ bits 32
 
 section .text
 
-global load_idt
+global idt_load
 
-load_idt:
+idt_load:
 	mov edx, [esp + 4]
 	lidt [edx]
 	sti

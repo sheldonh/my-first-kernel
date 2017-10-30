@@ -4,7 +4,7 @@
 #define IDT_SIZE 256
 #define PIC_INTR_KBD 0x02
 
-extern void load_idt(unsigned long *idt_ptr);
+extern void idt_load(unsigned long *idt_ptr);
 
 struct IDT_entry{
 	unsigned short int offset_lowerbits;
@@ -66,5 +66,5 @@ void idt_init(void)
 	idt_ptr[0] = (sizeof (struct IDT_entry) * IDT_SIZE) + ((idt_address & 0xFFFF) << 16);
 	idt_ptr[1] = idt_address >> 16 ;
 
-	load_idt(idt_ptr);
+	idt_load(idt_ptr);
 }
