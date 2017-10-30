@@ -1,6 +1,7 @@
 CFLAGS=-m32 -g -fno-stack-protector -fno-builtin -Wall -Werror
+OBJECTS=boot.o idt_load.o idt.o kbd_irq.o kbd.o kernel.o ports.o video.o
 
-kernel: kernel.ld kernel.o kmain.o ports.o video.o kbd_irq.o kbd.o idt_load.o idt.o
+kernel: kernel.ld $(OBJECTS)
 	ld -m elf_i386 -o $@ -T $^
 kernel.sym: kernel
 	objcopy --only-keep-debug kernel kernel.sym

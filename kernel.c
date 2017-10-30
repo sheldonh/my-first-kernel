@@ -1,7 +1,7 @@
 #include "idt.h"
 #include "video.h"
 
-void kmain(void)
+void kernel(void)
 {
 	idt_init();
 	video_init();
