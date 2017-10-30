@@ -47,9 +47,9 @@ unsigned short keyboard_shift;
 
 void keyboard_handler_main(void) {
 
-	if (read_port(KEYBOARD_STATUS_PORT) & 0x01) {
-		unsigned char keycode = read_port(KEYBOARD_DATA_PORT);
-		write_port(0x20, 0x20); // End Of Interrupt
+	if (rport(KEYBOARD_STATUS_PORT) & 0x01) {
+		unsigned char keycode = rport(KEYBOARD_DATA_PORT);
+		wport(0x20, 0x20); // End Of Interrupt
 		if (keycode == 0x2A)
 			keyboard_shift = 1;
 		else if (keycode == 0xAA)

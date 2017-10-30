@@ -6,10 +6,10 @@ unsigned int current_loc = 0;
 char *vidptr = (char *)0xb8000;
 
 void update_cursor(unsigned int loc) {
-	write_port(0x3D4, 0x0F);
-	write_port(0x3D5, loc & 0xFF);
-	write_port(0x3D4, 0x0E);
-	write_port(0x3D5, (loc >> 8) & 0xFF);
+	wport(0x3D4, 0x0F);
+	wport(0x3D5, loc & 0xFF);
+	wport(0x3D4, 0x0E);
+	wport(0x3D5, (loc >> 8) & 0xFF);
 }
 
 void clear_screen(void) {

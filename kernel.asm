@@ -10,8 +10,6 @@ section .text
 
 global start
 extern kmain	        ;kmain is defined in the c file
-extern read_port
-extern write_port
 
 start:
   cli 			;block interrupts

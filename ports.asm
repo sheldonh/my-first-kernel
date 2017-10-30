@@ -2,15 +2,15 @@ bits 32
 
 section .text
 
-global read_port
-global write_port
+global rport
+global wport
 
-read_port:
+rport:
 	mov edx, [esp + 4]
 	in al, dx
 	ret
 
-write_port:
+wport:
 	mov edx, [esp + 4]
 	mov al, [esp + 4 + 4]
 	out dx, al

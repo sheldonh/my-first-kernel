@@ -1,5 +1,5 @@
 #ifndef PORTS_H
 #define PORTS_H
-extern void write_port(unsigned short port, unsigned char data);
-extern unsigned char read_port(unsigned short port);
+extern void wport(unsigned short port, unsigned char data);
+extern unsigned char rport(unsigned short port);
 #endif
