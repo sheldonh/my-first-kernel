@@ -12,9 +12,9 @@ kernel.debug: kernel.ld $(OBJECTS)
 %.o: %.c *.h
 	gcc $(CFLAGS) -o $@ -c $<
 run: kernel
-	qemu-system-i386 -kernel $< -m 1056K -serial pty
+	qemu-system-i386 -kernel $< -m 1056K -serial stdio
 debug: kernel kernel.sym
-	qemu-system-i386 -kernel $< -s -S -serial pty
+	qemu-system-i386 -kernel $< -s -S -serial stdio
 clean:
 	rm -f kernel kernel.debug kernel.sym *.o
 
