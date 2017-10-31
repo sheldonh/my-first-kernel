@@ -1,8 +1,8 @@
 #include "kbd.h"
 #include "ports.h"
+#include "serial.h"
 
 #define IDT_SIZE 256
-#define PIC_INTR_KBD 0x02
 
 extern void idt_load(unsigned long *idt_ptr);
 
@@ -18,17 +18,24 @@ struct IDT_entry IDT[IDT_SIZE];
 
 void idt_init(void)
 {
-	unsigned long keyboard_address;
+	unsigned long irq_handler_address;
 	unsigned long idt_address;
 	unsigned long idt_ptr[2];
 
 	/* populate IDT entry of keyboard's interrupt */
-	keyboard_address = (unsigned long)kbd_irq;
-	IDT[0x21].offset_lowerbits = keyboard_address & 0xffff;
+	irq_handler_address = (unsigned long)kbd_irq;
+	IDT[0x21].offset_lowerbits = irq_handler_address & 0xffff;
 	IDT[0x21].selector = 0x08; /* KERNEL_CODE_SEGMENT_OFFSET */
 	IDT[0x21].zero = 0;
 	IDT[0x21].type_attr = 0x8e; /* INTERRUPT_GATE */
-	IDT[0x21].offset_higherbits = (keyboard_address & 0xffff0000) >> 16;
+	IDT[0x21].offset_higherbits = (irq_handler_address & 0xffff0000) >> 16;
+
+	irq_handler_address = (unsigned long)serial_irq;
+	IDT[0x24].offset_lowerbits = irq_handler_address & 0xffff;
+	IDT[0x24].selector = 0x08; /* KERNEL_CODE_SEGMENT_OFFSET */
+	IDT[0x24].zero = 0;
+	IDT[0x24].type_attr = 0x8e; /* INTERRUPT_GATE */
+	IDT[0x24].offset_higherbits = (irq_handler_address & 0xffff0000) >> 16;
 
 	/*     Ports
 	*	 PIC1	PIC2
@@ -58,7 +65,7 @@ void idt_init(void)
 	/* Initialization finished */
 
 	/* mask interrupts */
-	wport(0x21 , 0xFD);
+	wport(0x21 , 0xED); // Unmask IRQ1 and IRQ4
 	wport(0xA1 , 0xFF);
 
 	/* fill the IDT descriptor */

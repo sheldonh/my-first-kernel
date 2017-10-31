@@ -35,3 +35,8 @@ void putc(unsigned char c) {
 	}
 	update_cursor(current_loc / 2);
 }
+
+void puts(char *s) {
+	for (int i = 0; s[i] != '\0'; i++)
+		putc(s[i]);
+}
